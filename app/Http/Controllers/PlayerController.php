@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Player;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Util;
 
 class PlayerController extends Controller
 {
@@ -59,5 +60,26 @@ class PlayerController extends Controller
         }
 
         return $idplayer;
-    }          
+    }   
+
+    public function getMyGames(Request $request){
+        $user = Util::$user;
+        if(!($user instanceof Player)){
+            throw new \Exception('Solo se pueden consultar mis juegos los jugadores');
+        }
+
+        $limit = 15;
+        if ($request->has('limit')) {
+            $limit = $request->input('limit');
+        }    
+
+        $page = 1;
+        if ($request->has('page')) {
+            $page = $request->input('page');
+        }  
+
+        $games = $user->games()->paginate((int)$limit, ['*'], 'page', $page);
+
+        return $games; 
+    }         
 }

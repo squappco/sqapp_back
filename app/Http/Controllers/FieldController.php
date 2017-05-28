@@ -19,9 +19,24 @@ class FieldController extends Controller
         $page = 1;
         if ($request->has('page')) {
             $page = $request->input('page');
-        } 
+        }
 
-        $fields = Field::paginate((int)$limit, ['*'], 'page', $page);
+        $lat = -1;
+        if ($request->has('lat')) {
+            $lat = $request->input('lat');
+        }
+
+        $lng = -1;
+        if ($request->has('lng')) {
+            $lng = $request->input('lng');
+        }     
+
+        if($lat != -1 && $lng != -1){
+            $fields = Field::where('lat', (float)$lat)->where('lng', (float)$lng)->first();
+        }           
+        else{
+            $fields = Field::paginate((int)$limit, ['*'], 'page', $page);
+        }        
         return $fields;
     }
 

@@ -11,6 +11,6 @@ class Player extends Model
     
     public function games()
     {
-        return $this->belongsToMany('App\Models\Game', 'player_game', 'player', 'id');
+        return $this->belongsToMany('App\Models\Game', 'player_game', 'player', 'player');
     }         
 }
